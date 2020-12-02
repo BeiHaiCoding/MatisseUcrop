@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.ActionBar;
@@ -121,6 +122,12 @@ public class MatisseActivity extends AppCompatActivity implements
             mMediaStoreCompat.setCaptureStrategy(mSpec.captureStrategy);
         }
 
+        if (mSpec.isCircleCrop){
+            if (!mSpec.ableCrop){
+                throw new RuntimeException("crop function need able crop in Matisse");
+            }
+        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -186,15 +193,16 @@ public class MatisseActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        setResult(Activity.RESULT_CANCELED);
+        setResult(UCrop.RESULT_ERROR);
         super.onBackPressed();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK)
-            return;
+        if (resultCode != RESULT_OK) {
+            onBackPressed();
+        }
 
         if (requestCode == REQUEST_CODE_PREVIEW) {
             Bundle resultBundle = data.getBundleExtra(BasePreviewActivity.EXTRA_RESULT_BUNDLE);
@@ -215,9 +223,8 @@ public class MatisseActivity extends AppCompatActivity implements
                 result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
                 result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
                 result.putExtra(EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
-                startUCrop(selectedUris.get(0));
-//                setResult(RESULT_OK, result);
-//                finish();
+                isAbleCrop(selectedUris.get(0),result);
+
             } else {
                 mSelectedCollection.overwrite(selected, collectionType);
                 Fragment mediaSelectionFragment = getSupportFragmentManager().findFragmentByTag(
@@ -238,20 +245,19 @@ public class MatisseActivity extends AppCompatActivity implements
             Intent result = new Intent();
             result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selected);
             result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPath);
-//            setResult(RESULT_OK, result);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
                 MatisseActivity.this.revokeUriPermission(contentUri,
                         Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             new SingleMediaScanner(this.getApplicationContext(), path, new SingleMediaScanner.ScanListener() {
-                @Override public void onScanFinish() {
+                @Override
+                public void onScanFinish() {
                     Log.i("SingleMediaScanner", "scan finish!");
                 }
             });
-           startUCrop(contentUri);
-//            finish();
-        }else if (requestCode ==UCrop.REQUEST_CROP){
-            setResult(RESULT_OK,data);
+            isAbleCrop(contentUri,result);
+        } else if (requestCode == UCrop.REQUEST_CROP) {
+            setResult(RESULT_OK, data);
             finish();
         }
     }
@@ -318,9 +324,23 @@ public class MatisseActivity extends AppCompatActivity implements
         return count;
     }
 
-    public void startUCrop(Uri uri){
-        UCrop.of(uri,Uri.fromFile(new File(getCacheDir(),(System.currentTimeMillis()/1000)+"_avatar.png")))
-                .withMaxResultSize(1080,1080)
+    public void isAbleCrop(Uri uri,Intent data){
+        if (mSpec.ableCrop) {
+            if (mSpec.maxSelectable==1) {
+                startUCrop(uri);
+            }else {
+                throw new RuntimeException("crop need maxSelectable is 1");
+            }
+        }else {
+            setResult(RESULT_OK,data);
+            finish();
+        }
+    }
+
+
+    public void startUCrop(Uri uri) {
+        UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), (System.currentTimeMillis() / 1000) + "_avatar.png")))
+                .withMaxResultSize(1080, 1080)
                 .start(this);
     }
 
@@ -338,9 +358,7 @@ public class MatisseActivity extends AppCompatActivity implements
             ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
             result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
             result.putExtra(EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
-            startUCrop(selectedUris.get(0));
-//            setResult(RESULT_OK, result);
-//            finish();
+            isAbleCrop(selectedUris.get(0),result);
         } else if (v.getId() == R.id.originalLayout) {
             int count = countOverMaxSize();
             if (count > 0) {

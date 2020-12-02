@@ -114,6 +114,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         .choose(MimeType.ofImage())
                         .theme(R.style.Matisse_Dracula)
                         .countable(false)
+                        .ableCrop(true)
                         .maxSelectable(1)
                         .showPreview(false)
                         .originalEnable(false)

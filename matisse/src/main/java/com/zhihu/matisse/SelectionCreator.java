@@ -293,9 +293,6 @@ public final class SelectionCreator {
     }
 
     public SelectionCreator isCircleCrop(boolean able) {
-        if (!mSelectionSpec.ableCrop){
-            throw new IllegalArgumentException("Matisse need able crop");
-        }
         mSelectionSpec.isCircleCrop = able;
         return this;
     }
