@@ -26,7 +26,7 @@
         <activity android:name="com.zhihu.matisse.internal.ui.AlbumPreviewActivity"/>
         <activity android:name="com.zhihu.matisse.internal.ui.SelectedPreviewActivity"/>
         <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
+            android:name="com.zhihu.matisse.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
