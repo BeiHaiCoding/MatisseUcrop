@@ -115,6 +115,7 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         .theme(R.style.Matisse_Dracula)
                         .countable(false)
                         .ableCrop(true)
+                        .isCircleCrop(true)
                         .maxSelectable(1)
                         .showPreview(false)
                         .originalEnable(false)
