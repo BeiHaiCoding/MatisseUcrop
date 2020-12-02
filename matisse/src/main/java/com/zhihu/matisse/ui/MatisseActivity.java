@@ -341,6 +341,7 @@ public class MatisseActivity extends AppCompatActivity implements
     public void startUCrop(Uri uri) {
         UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), (System.currentTimeMillis() / 1000) + "_avatar.png")))
                 .withMaxResultSize(1080, 1080)
+                .withAspectRatio(1,1)
                 .withOptions(getUCropOptions())
                 .start(this);
     }
@@ -349,6 +350,8 @@ public class MatisseActivity extends AppCompatActivity implements
         UCrop.Options options = new UCrop.Options();
         options.setCircleDimmedLayer(mSpec.isCircleCrop);
         options.setHideBottomControls(true);
+        options.setShowCropFrame(false);
+        options.setShowCropGrid(false);
         return options;
     }
 
