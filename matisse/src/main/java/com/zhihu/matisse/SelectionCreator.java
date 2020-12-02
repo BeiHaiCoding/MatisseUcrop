@@ -287,6 +287,19 @@ public final class SelectionCreator {
         return this;
     }
 
+    public SelectionCreator ableCrop(boolean able) {
+        mSelectionSpec.ableCrop = able;
+        return this;
+    }
+
+    public SelectionCreator isCircleCrop(boolean able) {
+        if (!mSelectionSpec.ableCrop){
+            throw new IllegalArgumentException("Matisse need able crop");
+        }
+        mSelectionSpec.isCircleCrop = able;
+        return this;
+    }
+
     /**
      * Photo thumbnail's scale compared to the View's size. It should be a float value in (0.0,
      * 1.0].
@@ -316,6 +329,8 @@ public final class SelectionCreator {
         mSelectionSpec.imageEngine = imageEngine;
         return this;
     }
+
+
 
     /**
      * Set listener for callback immediately when user select or unselect something.

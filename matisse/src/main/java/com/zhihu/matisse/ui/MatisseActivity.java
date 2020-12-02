@@ -215,11 +215,9 @@ public class MatisseActivity extends AppCompatActivity implements
                 result.putParcelableArrayListExtra(EXTRA_RESULT_SELECTION, selectedUris);
                 result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
                 result.putExtra(EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
-                UCrop.of(selectedUris.get(0),Uri.fromFile(new File(getCacheDir(),(System.currentTimeMillis()/1000)+"_avatar.png")))
-                        .withMaxResultSize(1080,1080)
-                        .start(this);
+                startUCrop(selectedUris.get(0));
 //                setResult(RESULT_OK, result);
-                finish();
+//                finish();
             } else {
                 mSelectedCollection.overwrite(selected, collectionType);
                 Fragment mediaSelectionFragment = getSupportFragmentManager().findFragmentByTag(
@@ -250,9 +248,10 @@ public class MatisseActivity extends AppCompatActivity implements
                     Log.i("SingleMediaScanner", "scan finish!");
                 }
             });
-            UCrop.of(contentUri,Uri.fromFile(new File(getCacheDir(),(System.currentTimeMillis()/1000)+"_avatar.png")))
-                    .withMaxResultSize(1080,1080)
-                    .start(this);
+           startUCrop(contentUri);
+//            finish();
+        }else if (requestCode ==UCrop.REQUEST_CROP){
+            setResult(RESULT_OK,data);
             finish();
         }
     }
@@ -319,6 +318,12 @@ public class MatisseActivity extends AppCompatActivity implements
         return count;
     }
 
+    public void startUCrop(Uri uri){
+        UCrop.of(uri,Uri.fromFile(new File(getCacheDir(),(System.currentTimeMillis()/1000)+"_avatar.png")))
+                .withMaxResultSize(1080,1080)
+                .start(this);
+    }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_preview) {
@@ -333,11 +338,9 @@ public class MatisseActivity extends AppCompatActivity implements
             ArrayList<String> selectedPaths = (ArrayList<String>) mSelectedCollection.asListOfString();
             result.putStringArrayListExtra(EXTRA_RESULT_SELECTION_PATH, selectedPaths);
             result.putExtra(EXTRA_RESULT_ORIGINAL_ENABLE, mOriginalEnable);
-            UCrop.of(selectedUris.get(0),Uri.fromFile(new File(getCacheDir(),(System.currentTimeMillis()/1000)+"_avatar.png")))
-                    .withMaxResultSize(1080,1080)
-                    .start(this);
+            startUCrop(selectedUris.get(0));
 //            setResult(RESULT_OK, result);
-            finish();
+//            finish();
         } else if (v.getId() == R.id.originalLayout) {
             int count = countOverMaxSize();
             if (count > 0) {

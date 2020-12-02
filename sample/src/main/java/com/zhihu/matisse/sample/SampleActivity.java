@@ -19,8 +19,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.engine.impl.PicassoEngine;
 import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+import com.zhihu.matisse.ucrop.UCrop;
 
 import java.util.List;
 
@@ -111,11 +114,11 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                         .choose(MimeType.ofImage())
                         .theme(R.style.Matisse_Dracula)
                         .countable(false)
-                        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-                        .maxSelectable(9)
-                        .originalEnable(true)
+                        .maxSelectable(1)
+                        .showPreview(false)
+                        .originalEnable(false)
                         .maxOriginalSize(10)
-                        .imageEngine(new PicassoEngine())
+                        .imageEngine(new GlideEngine())
                         .forResult(REQUEST_CODE_CHOOSE);
                 break;
             case R.id.only_gif:
@@ -138,26 +141,25 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
             default:
                 break;
         }
-        mAdapter.setData(null, null);
+        mAdapter.setData(null);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == UCrop && resultCode == RESULT_OK) {
-            mAdapter.setData(Matisse.obtainResult(data), Matisse.obtainPathResult(data));
-            Log.e("OnActivityResult ", String.valueOf(Matisse.obtainOriginalState(data)));
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            mAdapter.setData(UCrop.getOutput(data));
+            Log.e("OnActivityResult ", String.valueOf(UCrop.getOutput(data)));
         }
     }
 
-    private static class UriAdapter extends RecyclerView.Adapter<UriAdapter.UriViewHolder> {
+    private  class UriAdapter extends RecyclerView.Adapter<UriAdapter.UriViewHolder> {
 
-        private List<Uri> mUris;
-        private List<String> mPaths;
+        private Uri mUris;
 
-        void setData(List<Uri> uris, List<String> paths) {
-            mUris = uris;
-            mPaths = paths;
+        void setData(Uri uri) {
+            mUris = uri;
+
             notifyDataSetChanged();
         }
 
@@ -169,8 +171,8 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public void onBindViewHolder(UriViewHolder holder, int position) {
-            holder.mUri.setText(mUris.get(position).toString());
-            holder.mPath.setText(mPaths.get(position));
+            holder.mUri.setText(mUris.toString());
+            holder.mPath.setText(getPath(mUris));
 
             holder.mUri.setAlpha(position % 2 == 0 ? 1.0f : 0.54f);
             holder.mPath.setAlpha(position % 2 == 0 ? 1.0f : 0.54f);
@@ -178,10 +180,10 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         public int getItemCount() {
-            return mUris == null ? 0 : mUris.size();
+            return mUris == null ? 0 : 1;
         }
 
-        static class UriViewHolder extends RecyclerView.ViewHolder {
+         class UriViewHolder extends RecyclerView.ViewHolder {
 
             private TextView mUri;
             private TextView mPath;
@@ -192,6 +194,25 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 mPath = (TextView) contentView.findViewById(R.id.path);
             }
         }
+    }
+
+    public String getPath(Uri uri) {
+//        String[] projection = {MediaStore.Video.Media.DATA};
+//        Cursor cursor = managedQuery(uri, projection, null, null, null);
+//        int column_index = cursor
+//                .getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+
+
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = this.getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            path = cursor.getString(cursor.getColumnIndex("_data"));
+            cursor.close();
+        }
+        return path;
     }
 
 }

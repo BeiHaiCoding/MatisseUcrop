@@ -13,6 +13,7 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+
 import com.zhihu.matisse.R;
 import com.zhihu.matisse.ucrop.callback.BitmapCropCallback;
 import com.zhihu.matisse.ucrop.callback.CropBoundsChangeListener;
@@ -84,7 +85,7 @@ public class CropImageView extends TransformImageView {
                 compressFormat, compressQuality,
                 getImageInputPath(), getImageOutputPath(), getExifInfo());
 
-        new BitmapCropTask(getViewBitmap(), imageState, cropParameters, cropCallback)
+        new BitmapCropTask(getContext(), getViewBitmap(), imageState, cropParameters, cropCallback)
                 .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 

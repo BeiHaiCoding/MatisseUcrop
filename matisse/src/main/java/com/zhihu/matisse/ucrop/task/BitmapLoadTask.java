@@ -11,7 +11,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
 import com.zhihu.matisse.ucrop.callback.BitmapLoadCallback;
 import com.zhihu.matisse.ucrop.model.ExifInfo;
 import com.zhihu.matisse.ucrop.util.BitmapLoadUtils;

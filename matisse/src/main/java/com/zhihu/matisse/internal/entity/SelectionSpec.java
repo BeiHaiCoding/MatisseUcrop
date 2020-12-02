@@ -48,6 +48,8 @@ public final class SelectionSpec {
     public CaptureStrategy captureStrategy;
     public int spanCount;
     public int gridExpectedSize;
+    public boolean ableCrop;
+    public boolean isCircleCrop;
     public float thumbnailScale;
     public ImageEngine imageEngine;
     public boolean hasInited;
@@ -89,6 +91,8 @@ public final class SelectionSpec {
         thumbnailScale = 0.5f;
         imageEngine = new GlideEngine();
         hasInited = true;
+        ableCrop = false;
+        isCircleCrop =false;
         originalable = false;
         autoHideToobar = false;
         originalMaxSize = Integer.MAX_VALUE;
