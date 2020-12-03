@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.BeiHaiCoding:MatisseUcrop:1.0.1'
+    implementation 'com.github.BeiHaiCoding:MatisseUcrop:1.0.3'
 }
 ```
 
