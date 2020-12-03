@@ -4,7 +4,8 @@ UCrop开放的三个方法也在Matisse里使用:
 ```
 ableCrop:Boolean                 是否开启裁剪（该功能必须是Matisse的maxSelectable为1）
 isCircleCrop:Boolean             是否显示圆形的裁剪框
-isHideBottomControls:Boolean     是否关闭Ucrop的底部操作栏```
+isHideBottomControls:Boolean     是否关闭Ucrop的底部操作栏
+```
 
 
 ## 下载
