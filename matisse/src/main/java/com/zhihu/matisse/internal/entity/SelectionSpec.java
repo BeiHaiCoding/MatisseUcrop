@@ -50,6 +50,7 @@ public final class SelectionSpec {
     public int gridExpectedSize;
     public boolean ableCrop;
     public boolean isCircleCrop;
+    public boolean isHideBottomControls;
     public float thumbnailScale;
     public ImageEngine imageEngine;
     public boolean hasInited;
@@ -93,6 +94,7 @@ public final class SelectionSpec {
         hasInited = true;
         ableCrop = false;
         isCircleCrop =false;
+        isHideBottomControls=false;
         originalable = false;
         autoHideToobar = false;
         originalMaxSize = Integer.MAX_VALUE;

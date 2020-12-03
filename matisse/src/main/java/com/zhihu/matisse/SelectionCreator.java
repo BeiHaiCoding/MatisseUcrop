@@ -297,6 +297,11 @@ public final class SelectionCreator {
         return this;
     }
 
+    public SelectionCreator isHideBottomControls(boolean able) {
+        mSelectionSpec.isHideBottomControls = able;
+        return this;
+    }
+
     /**
      * Photo thumbnail's scale compared to the View's size. It should be a float value in (0.0,
      * 1.0].

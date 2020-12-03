@@ -122,12 +122,6 @@ public class MatisseActivity extends AppCompatActivity implements
             mMediaStoreCompat.setCaptureStrategy(mSpec.captureStrategy);
         }
 
-        if (mSpec.isCircleCrop){
-            if (!mSpec.ableCrop){
-                throw new RuntimeException("crop function need able crop in Matisse");
-            }
-        }
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -349,7 +343,7 @@ public class MatisseActivity extends AppCompatActivity implements
     public UCrop.Options getUCropOptions(){
         UCrop.Options options = new UCrop.Options();
         options.setCircleDimmedLayer(mSpec.isCircleCrop);
-        options.setHideBottomControls(true);
+        options.setHideBottomControls(mSpec.isHideBottomControls);
         options.setShowCropFrame(false);
         options.setShowCropGrid(false);
         return options;
