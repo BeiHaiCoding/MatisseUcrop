@@ -1,21 +1,11 @@
-![Image](/image/banner.png)
+Matisse(V0.5.3-beta3)+Ucrop(V2.2.6)的整合。支持所有Matisse的方法。UCrop没有使用native版本的，太大了，不喜欢。
+UCrop开放的三个方法也在Matisse里使用:
+ableCrop:Boolean                 是否开启裁剪（该功能必须是Matisse的maxSelectable为1）
+isCircleCrop:Boolean             是否显示圆形的裁剪框
+isHideBottomControls:Boolean     是否关闭Ucrop的底部操作栏
 
-# Matisse
-[![Build Status](https://travis-ci.org/zhihu/Matisse.svg)](https://travis-ci.org/zhihu/Matisse) [ ![Download](https://api.bintray.com/packages/zhihu/maven/matisse/images/download.svg) ](https://bintray.com/zhihu/maven/matisse/_latestVersion)
 
-Matisse is a well-designed local image and video selector for Android. You can  
-- Use it in Activity or Fragment
-- Select images including JPEG, PNG, GIF and videos including MPEG, MP4 
-- Apply different themes, including two built-in themes and custom themes
-- Different image loaders
-- Define custom filter rules
-- More to find out yourself
-
-| Zhihu Style                    | Dracula Style                     | Preview                          |
-|:------------------------------:|:---------------------------------:|:--------------------------------:|
-|![](image/screenshot_zhihu.png) | ![](image/screenshot_dracula.png) | ![](image/screenshot_preview.png)|
-
-## Download
+## 下载
 Gradle:
 
 ```groovy
@@ -24,62 +14,43 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.zhihu.android:matisse:$latest_version'
+    implementation 'com.github.BeiHaiCoding:MatisseUcrop:1.0.1'
 }
 ```
 
-Check out [Matisse releases](https://github.com/zhihu/Matisse/releases) to see more unstable versions.
 
-## ProGuard
-If you use [Glide](https://github.com/bumptech/glide) as your image engine, add rules as Glide's README says.  
-And add extra rule:
-```pro
--dontwarn com.squareup.picasso.**
-```
-
-If you use [Picasso](https://github.com/square/picasso) as your image engine, add rules as Picasso's README says.  
-And add extra rule:
-```pro
--dontwarn com.bumptech.glide.**
-```
-**Attention**: The above progurad rules are correct.
-
-## How do I use Matisse?
-#### Permission
-The library requires two permissions:
+## 如何使用?
+#### 权限
+该库需要使用三个权限:
 - `android.permission.READ_EXTERNAL_STORAGE`
 - `android.permission.WRITE_EXTERNAL_STORAGE`
+- `<uses-permission android:name="android.permission.CAMERA"/>`
 
-So if you are targeting Android 6.0+, you need to handle runtime permission request before next step.
 
-#### Simple usage snippet
+
+#### 使用事例
 ------
-Start `MatisseActivity` from current `Activity` or `Fragment`:
+
 
 ```java
 Matisse.from(MainActivity.this)
-        .choose(MimeType.allOf())
-        .countable(true)
-        .maxSelectable(9)
-        .addFilter(new GifSizeFilter(320, 320, 5 * Filter.K * Filter.K))
-        .gridExpectedSize(getResources().getDimensionPixelSize(R.dimen.grid_expected_size))
+        .choose(MimeType.ofImage())
+        .theme(R.style.Matisse_Dracula)
+        .countable(flase)
+        .maxSelectable(1)
+        .ableCrop(true)
+        .isCircleCrop(true)
+        .isHideBottomControls(true)
         .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-        .thumbnailScale(0.85f)
         .imageEngine(new GlideEngine())
         .showPreview(false) // Default is `true`
         .forResult(REQUEST_CODE_CHOOSE);
 ```
+
+关于Matisse的更多用法请移步至[Matisse](https://github.com/zhihu/Matisse)
+
  
-#### Themes
-There are two built-in themes you can use to start `MatisseActivity`:
-- `R.style.Matisse_Zhihu` (light mode)
-- `R.style.Matisse_Dracula` (dark mode)  
-
-And Also you can define your own theme as you wish.
-
-#### Receive Result
-In `onActivityResult()` callback of the starting `Activity` or `Fragment`:
-
+没有使用UCrop，获取返回值
 ```java
 List<Uri> mSelected;
 
@@ -93,14 +64,18 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 }
 ```
 
-#### More
-Find more details about Matisse in [wiki](https://github.com/zhihu/Matisse/wiki).
+使用UCrop，获取返回值
+```java
+ @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
+            Uri uri = UCrop.getOutput(data);
+            Log.e("OnActivityResult ", String.valueOf(uri));
+        }
+    }
+```
 
-## Contributing
-[Matisse is an Open Source Project](https://github.com/zhihu/Matisse/blob/master/CONTRIBUTING.md)
-
-## Thanks
-This library is inspired by [Laevatein](https://github.com/nohana/Laevatein) and uses some of its source code.
 
 ## License
 

@@ -15,7 +15,25 @@
   limitations under the License.
   -->
 <paths>
-    <external-path
-        name="my_images"
-        path="Pictures"/>
+    <!--    外部存储区域根目录下的文件 Context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)  不需要权限-->
+    <!--    /sdcard/Android/data/包名/files/Pictures  -->
+    <external-files-path name="mat_external_files" path="Pictures" />
+
+    <!--    外部存储区域根目录下的文件 Context.getExternalCacheDir  不需要权限-->
+    <!--    /sdcard/Android/data/包名/cache/images  -->
+    <external-cache-path name="mat_external_cache" path="images" />
+
+    <!--    /sdcard/DCIM/test-->
+    <external-path name="mat_DCIM" path="DCIM/test" />
+
+    <!--    /sdcard/picture/test-->
+    <external-path name="mat_Pictures" path="Pictures/test" />
+
+    <!--    私有的存储区域 Context.getFilesDir()-->
+    <!--/data/user/0/包名/files/images-->
+    <files-path name="mat_private_files" path="images" />
+
+    <!--    私有的存储区域 Context.getCacheDir()-->
+    <!--/data/user/0/包名/cache/images-->
+    <cache-path name="mat_private_cache" path="images" />
 </paths>

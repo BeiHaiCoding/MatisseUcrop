@@ -113,9 +113,13 @@ public class SampleActivity extends AppCompatActivity implements View.OnClickLis
                 Matisse.from(SampleActivity.this)
                         .choose(MimeType.ofImage())
                         .theme(R.style.Matisse_Dracula)
+                        .capture(true)
+                        .captureStrategy(
+                                new CaptureStrategy(true, "com.zhihu.matisse.sample.fileprovider", "test"))
                         .countable(false)
                         .ableCrop(true)
                         .isCircleCrop(true)
+                        .isHideBottomControls(true)
                         .maxSelectable(1)
                         .showPreview(false)
                         .originalEnable(false)
