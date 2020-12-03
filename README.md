@@ -1,8 +1,8 @@
 Matisse(V0.5.3-beta3)+Ucrop(V2.2.6)的整合。支持所有Matisse的方法。UCrop没有使用native版本的，太大了，不喜欢。
 UCrop开放的三个方法也在Matisse里使用:
-ableCrop:Boolean                 是否开启裁剪（该功能必须是Matisse的maxSelectable为1）
-isCircleCrop:Boolean             是否显示圆形的裁剪框
-isHideBottomControls:Boolean     是否关闭Ucrop的底部操作栏
+`ableCrop:Boolean                 是否开启裁剪（该功能必须是Matisse的maxSelectable为1）`
+`isCircleCrop:Boolean             是否显示圆形的裁剪框`
+`isHideBottomControls:Boolean     是否关闭Ucrop的底部操作栏`
 
 
 ## 下载
